@@ -1,4 +1,5 @@
 require 'digest'
+require 'json'
 
 module BlockChain
   class Basic
@@ -28,15 +29,25 @@ module BlockChain
       hash == to_hash
     end
 
+    def to_json(options=nil)
+      {
+        timestamp: timestamp,
+        index: index,
+        hash: hash,
+        previous_hash: previous_hash,
+        payload: payload
+      }.to_json
+    end
+
     # make the :new method private, so cannot create new instances of class BlockChain::Basic directly
     private_class_method :new
 
-    def self.first(data="First block")
-      new(nil, data)
+    def self.first(payload="First block")
+      new(nil, payload)
     end
 
-    def self.next(previous, data='Subsequent block...')
-      new(previous, data)
+    def self.next(previous, payload='Subsequent block...')
+      new(previous, payload)
     end
 
   end
