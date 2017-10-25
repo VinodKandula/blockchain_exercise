@@ -11,6 +11,12 @@ RUN apk update && \
     apk add $BUILD_PACKAGES && \
     apk add $RUBY_PACKAGES
 
+# Add serf binary
+RUN curl -o /tmp/serf_0.8.1_linux_amd64.zip https://releases.hashicorp.com/serf/0.8.1/serf_0.8.1_linux_amd64.zip && \
+    cd /usr/local/bin && \
+    unzip /tmp/serf_0.8.1_linux_amd64.zip && \
+    chmod +x serf
+
 RUN mkdir /usr/app
 WORKDIR /usr/app
 
@@ -26,4 +32,4 @@ EXPOSE 4567
 EXPOSE 7946
 EXPOSE 7373
 
-CMD ["/usr/bin/ruby", "/usr/app/lib/server.rb"]
+CMD /usr/app/startup.sh

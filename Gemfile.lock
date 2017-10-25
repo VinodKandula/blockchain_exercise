@@ -2,10 +2,16 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorize (0.8.1)
+    json (2.1.0)
+    mixlib-log (1.7.1)
+    msgpack (1.1.0)
     mustermann (1.0.1)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    serfx (0.1.2)
+      mixlib-log
+      msgpack
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -18,6 +24,8 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
+  json
+  serfx
   sinatra
 
 BUNDLED WITH

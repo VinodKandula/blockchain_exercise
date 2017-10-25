@@ -1,6 +1,19 @@
 version: "3"
 services:
 
+  # Locally explosed entry point into network of blackchain services
+  blockchain_entry:
+    build: .
+    ports:
+      - "80:4567"
+      - "7946"
+      - "7373"
+    networks:
+      - blocknet
+    volumes:
+      - .:/usr/app
+
+  # Scalable blockchain definition
   blockchain:
     build: .
     ports:
