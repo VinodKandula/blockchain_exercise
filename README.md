@@ -1,11 +1,32 @@
 # blockchain_exercise
 Exercise in block chain understanding
 
-Very simple implementation with proof of work.
+At it's core is a very simple implementation with proof of work.
 
-    require_relative './block_chain/pow.rb'
-    b0 = BlockChain::Pow.first('x')
-    b1 = BlockChain::Pow.next(b0, 'yyy')
+    $ irb
+    require_relative './models/block/with_pow.rb'
+    b0 = Block::WithPow.first('x')
+    b1 = Block::WithPow.next(b0, 'yyy')
+
+To run the block chain as a cluster of nodes both `docker` and `docker-compose` must be installed on the host system.
+
+To start the cluster run
+
+    docker-compose up
+
+This will start 2 block chainn nodes.  Both are identical, one is bound to your host systems network for easy interaction, the other an example node simmulating a node on another network and inaccessible.  To scale the block chain nodes beyond 2 run the following;
+
+   docker-compose scale blockchain=2
+
+Once you have the number of block chain nodes desired they must be made aware of each other and clustered.  To network the nodes together allowing them to gossip effectively run the following helper script;
+
+    ./bootstrap_network.sh
+
+This will locate the ip's of all the docker containers and then make a htto call to the block chain node exposed to the host to register each ip.  From there the gossip protocal makes sure that every node in the network is aware of every other node.
+
+To add a transaction to the chain;
+
+    curl -d "to=Jane&from=Fred&amount=2" localhost:80/transaction
 
 ### Exercise direction
 
@@ -53,6 +74,7 @@ To post a transaction
 
 * https://github.com/openblockchains/awesome-blockchains
 * https://github.com/openblockchains/awesome-blockchains/tree/master/blockchain.rb
+* https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/
 * https://github.com/Haseeb-Qureshi/lets-build-a-blockchain
 
 * https://blog.codeship.com/build-minimal-docker-container-ruby-apps/

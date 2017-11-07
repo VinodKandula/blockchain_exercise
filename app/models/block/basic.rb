@@ -1,18 +1,19 @@
 require 'digest'
 require 'json'
 
-module BlockChain
+module Block
   class Basic
+    include Comparable
 
     FIELDS_TO_HASH = [:index, :timestamp, :payload, :previous_hash]
 
     attr_reader :index, :timestamp, :payload, :previous_hash, :hash
 
-    def initialize(previous, payload)
-      @timestamp     = Time.now
+    def initialize(previous_block, payload)
+      @timestamp     = Time.now.to_i
       @payload       = payload
-      @index         = previous.nil? ? 0 : previous.index+1
-      @previous_hash = previous.nil? ? nil : previous.hash
+      @index         = previous_block.nil? ? 0 : previous_block.index+1
+      @previous_hash = previous_block.nil? ? nil : previous_block.hash
       @hash          = to_hash
     end
 
@@ -37,6 +38,15 @@ module BlockChain
         previous_hash: previous_hash,
         payload: payload
       }.to_json
+    end
+
+    def ==(other_block)
+      self.to_json == other_block.to_json
+    end
+
+    def superceeded_by?(other_block)
+      (other_block.index > self.index) ||
+      (other_block.index == self.index && self.timestamp > other_block.timestamp)
     end
 
     # make the :new method private, so cannot create new instances of class BlockChain::Basic directly

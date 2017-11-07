@@ -1,6 +1,6 @@
 require_relative './basic.rb'
 
-class BlockChain::Pow < BlockChain::Basic
+class Block::WithPow < Block::Basic
 
   FIELDS_TO_HASH += [:nonce]
   attr_reader :nonce
